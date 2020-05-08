@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:tutorial_1/category.dart';
+import 'package:tutorial_1/unit.dart';
+
+final _backgroundColor = Colors.green[100];
 
 class CategoryRoute extends StatelessWidget {
   const CategoryRoute();
@@ -27,24 +30,57 @@ class CategoryRoute extends StatelessWidget {
     Colors.red,
   ];
 
+  /// Makes the correct number of rows for the list view.
+  ///
+  /// For portrait, we use a [ListView].
+  Widget _buildCategoryWidgets(List<Widget> categories) {
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) => categories[index],
+      itemCount: categories.length,
+    );
+  }
+
+  /// Returns a list of mock [Unit]s.
+  List<Unit> _retrieveUnitList(String categoryName) {
+    return List.generate(10, (int i) {
+      i += 1;
+      return Unit(
+        name: '$categoryName Unit $i',
+        conversion: i.toDouble(),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final categories = <Category>[];
+
+    for (var i = 0; i < _categoryNames.length; i++) {
+      categories.add(Category(
+        name: _categoryNames[i],
+        color: _baseColors[i],
+        iconLocation: Icons.cake,
+        units: _retrieveUnitList(_categoryNames[i]),
+      ));
+    }
+
     final listView = Container(
-        padding: EdgeInsets.only(left: 8.0, right: 8.0),
-        child: ListView.builder(
-          itemCount: _categoryNames.length,
-          itemBuilder: (context, index) {
-            return Category(
-                name: _categoryNames[index],
-                color: _baseColors[index],
-                icon: Icons.cake);
-          },
-        ));
+      color: _backgroundColor,
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      child: _buildCategoryWidgets(categories),
+    );
 
     final appBar = AppBar(
-      title: Text('Unit Converter', style: TextStyle(fontSize: 30.0)),
-      elevation: 0,
-      backgroundColor: Colors.green[100],
+      elevation: 0.0,
+      title: Text(
+        'Unit Converter',
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 30.0,
+        ),
+      ),
+      centerTitle: true,
+      backgroundColor: _backgroundColor,
     );
 
     return Scaffold(
