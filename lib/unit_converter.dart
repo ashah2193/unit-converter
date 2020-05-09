@@ -242,7 +242,6 @@ class _UnitConverterState extends State<UnitConverter> {
       ),
     );
 
-    // TODO: Use a ListView instead of a Column
     final converter = ListView(
       children: [
         input,
